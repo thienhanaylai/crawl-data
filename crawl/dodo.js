@@ -4,7 +4,7 @@ require("dotenv").config();
 
 async function crawlSchedule() {
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
     defaultViewport: null,
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });
@@ -46,12 +46,16 @@ async function crawlSchedule() {
     const location = $block.find(".private-block-body div").eq(0).text().trim();
     const position = $block.find(".private-block-body div").eq(1).text().trim();
 
-    const timeRange = time.replace(/–|—/g, "-");
-    const [startTime, endTime] = timeRange.split("-").map((t) => t.trim());
-    const isoDate = date.split(" ")[0].split("/").reverse().join("-");
-    const start = `${isoDate}T${startTime}:00`;
-    const end = `${isoDate}T${endTime}:00`;
-
+   const timeRange = time.replace(/–|—/g, "-");
+    const [startTime, endTime] = timeRange.split("-").map((t) => {
+      const [hour, minute] = t.trim().split(":");
+      return `${hour.padStart(2, "0")}`;
+    });
+        const isoDate = date.split(" ")[0].split("/");
+    const res = `${isoDate[2]}-${isoDate[0]}-${isoDate[1]}`;
+    
+    const start = `${res}T${startTime}:00:00`;
+    const end = `${res}T${endTime}:00:00`;
     result.push({ date, start, end, location, position });
   });
 

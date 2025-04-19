@@ -95,9 +95,8 @@ function getDateFromWeekAndDay(weekNumber, weekday, weekList) {
 
   // weekday: 1 = Thứ 2, 7 = Chủ nhật
   const targetDate = new Date(startDate);
-  targetDate.setDate(startDate.getDate() + (weekday - 1));
-
-  return targetDate.toISOString().split("T")[0]; // Trả về định dạng yyyy-mm-dd
+  targetDate.setDate(startDate.getDate() + (weekday - 2));
+ return targetDate.toISOString().split("T")[0]; // Trả về định dạng yyyy-mm-dd
 }
 
 function convertThuToNumber(thuStr) {
@@ -205,7 +204,7 @@ async function crawlThoiKhoaBieu(username, password) {
 
     const weekNumber = weekNumberMatch ? weekNumberMatch[1] : null;
 
-    console.log("Tuần đang được chọn:", weekNumber);
+   
     const dataList = [];
 
     table.find("td[onmouseover]").each((i, td) => {
@@ -230,7 +229,7 @@ async function crawlThoiKhoaBieu(username, password) {
         const kt = thoiGian.split("-")[1].trim();
         const gioBatDau = `${date}T${bd}:00`;
         const gioKetThuc = `${date}T${kt}:00`;
-        console.log(gioBatDau);
+        
         const monHoc = {
           tenMon: params[1] || "",
           maMon: params[2] || "",
